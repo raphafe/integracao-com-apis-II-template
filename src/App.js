@@ -21,27 +21,65 @@ function App() {
     getUsuarios();
   }, []);
 
-  const getUsuarios = () => {
-    axios
-      .get(
-        "https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users",
-        {
-          headers: {
-            Authorization: "ana-sammi-barbosa",
-          },
+  //USAR QUANDO FOR COM CLASSES
+
+  const getUsuarios = async () => {
+    try{
+      const resposta = await axios.get("https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users", {
+        headers: {
+          Authorization: "ana-sammi-barbosa",
         }
-      )
-      .then((res) => {
-        setUsuarios(res.data);
       })
-      .catch((error) => {
-        console.log(error.response);
-      });
+
+      setUsuarios(resposta.data)
+
+    } catch(erro) {
+      console.log(erro)
+    }
+    
+
+
+  }
+
+  //USAR QUANDO FOR COM FUNCOES
+
+  // const getUsuarios = () => {
+  //   axios
+  //     .get(
+  //       "https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users",
+  //       {
+  //         headers: {
+  //           Authorization: "ana-sammi-barbosa",
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       setUsuarios(res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.response);
+  //     });
+  // };
+
+  const pesquisaUsuario = async (pesquisa) => {
+    
+    try{
+      const res = await axios.get(`https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/search?name=${pesquisa.nome}&email=${pesquisa.email}`, {
+        headers: {
+          Authorization: "ana-sammi-barbosa",
+        }
+      })
+      setUsuarios(res.data)
+      setPageFlow(3)
+    }catch(error) {
+      console.log(error)
+    }
+    
   };
 
-  const pesquisaUsuario = (pesquisa) => {
-   
-  };
+  useEffect(() => {
+    pesquisaUsuario(pesquisa)
+  }, [pesquisa]);
 
   const onChangeName = (e) => {
     setNome(e.target.value);
@@ -57,7 +95,6 @@ function App() {
       email,
     };
     setPesquisa(novaPesquisa);
-   
     setNome("")
     setEmail("")
     

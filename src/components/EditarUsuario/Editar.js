@@ -11,25 +11,43 @@ export const EditarUsuario = (props) => {
   const [editar, setEditar] = useState(false)
 
 
-  const getDadosUsuario = () => {
-    axios
-      .get(
+  const getDadosUsuario =  async () => {
+    try{
+      const res = await axios.get(
         `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${props.id}`,
         {
           headers: {
             Authorization: "ana-sammi-barbosa",
           },
-        }
-      )
-      .then((res) => {
-        setUsuario(res.data);
-        setEmail(res.data.email);
-        setName(res.data.name);
       })
-      .catch((err) => {
-        console.log(err.response);
-      });
-  };
+
+      setUsuario(res.data);
+      setEmail(res.data.email);
+      setName(res.data.name);
+
+    }catch(err) {
+      console.log(err.response);
+    }
+  }
+  // const getDadosUsuario = () => {
+  //   axios
+  //     .get(
+  //       `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${props.id}`,
+  //       {
+  //         headers: {
+  //           Authorization: "ana-sammi-barbosa",
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       setUsuario(res.data);
+  //       setEmail(res.data.email);
+  //       setName(res.data.name);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response);
+  //     });
+  // };
 
   useEffect(() => {
     getDadosUsuario();
